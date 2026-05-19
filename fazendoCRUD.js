@@ -82,6 +82,34 @@ const server= http.createServer((req, res) =>{
         return;
     };
 
+     //Construindo o metodo DELETE- Remover livro
+     if(url === "/livros" && metodo === "DELETE"){
+        let body = '';
+
+        req.on('data', parte =>{
+            body+= parte;
+
+        });
+
+        req.on('end', () =>{
+            //Recebe o ID do livro a ser removido
+            const dados = JSON.parse(body);
+
+            //Filtra o array, removendo o livro com o ID informado.
+            //Dessa forma, o array de livros será mantido apenas com os objetos cujo ID é diferente do removido.
+            livro = livro.filter(livros => livros.id !== dados.id);
+
+            res.statusCode = 200;//Sucesso
+            res.end(JSON.stringify({
+                mensagem: 'Livro removido com sucesso!',
+                livro: livro
+            }));
+        });
+        return;
+     };
+     
+
+
     //Rota não encontrada
     res.statusCode = 404; //Não encontrada
     //Convertendo a resposta em JSON e exibindo a mensagem
